@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 
-def detect_runtime():
+def get_distribution_strategy():
     """
     Detect hardware, return appropriate distribution strategy
     """
