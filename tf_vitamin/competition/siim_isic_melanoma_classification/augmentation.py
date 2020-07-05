@@ -42,18 +42,18 @@ def get_mat(rotation, shear, height_zoom, width_zoom, height_shift, width_shift)
                  K.dot(zoom_matrix, shift_matrix))
 
 
-def transform(image, cfg):
+def transform(image, read_size, rot, shr, hzoom, wzoom, hshift, wshift):
     # input image - is one image of size [dim,dim,3] not a batch of [b,dim,dim,3]
     # output - image randomly rotated, sheared, zoomed, and shifted
-    dim = cfg["read_size"]
+    dim = read_size
     x_dim = dim % 2  # fix for size 331
 
-    rot = cfg['rot'] * tf.random.normal([1], dtype='float32')
-    shr = cfg['shr'] * tf.random.normal([1], dtype='float32')
-    h_zoom = 1.0 + tf.random.normal([1], dtype='float32') / cfg['hzoom']
-    w_zoom = 1.0 + tf.random.normal([1], dtype='float32') / cfg['wzoom']
-    h_shift = cfg['hshift'] * tf.random.normal([1], dtype='float32')
-    w_shift = cfg['wshift'] * tf.random.normal([1], dtype='float32')
+    rot = rot * tf.random.normal([1], dtype='float32')
+    shr = shr * tf.random.normal([1], dtype='float32')
+    h_zoom = 1.0 + tf.random.normal([1], dtype='float32') / hzoom
+    w_zoom = 1.0 + tf.random.normal([1], dtype='float32') / wzoom
+    h_shift = hshift * tf.random.normal([1], dtype='float32')
+    w_shift = wshift * tf.random.normal([1], dtype='float32')
 
     # GET TRANSFORMATION MATRIX
     m = get_mat(rot, shr, h_zoom, w_zoom, h_shift, w_shift)
