@@ -1,9 +1,17 @@
+import re
 import tensorflow as tf
+import numpy as np
 
 from tf_vitamin.entity.image_config import ImageConfig
 
 
 AUTO = tf.data.experimental.AUTOTUNE
+
+
+def count_data_items(filenames):
+    # the number of data items is written in the name of the .tfrec files, i.e. flowers00-230.tfrec = 230 data items
+    n = [int(re.compile(r"-([0-9]*)\.").search(filename).group(1)) for filename in filenames]
+    return np.sum(n)
 
 
 class ImageDatasetLoader:

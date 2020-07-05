@@ -1,6 +1,28 @@
+import math
+import tensorflow as tf
+
 from tensorflow.keras.callbacks import Callback
 import tensorflow.keras.backend as K
 import numpy as np
+
+
+def get_cosine_schedule_with_warmup(lr,num_warmup_steps, num_training_steps, num_cycles=0.5):
+    """
+    Modified version of the get_cosine_schedule_with_warmup from huggingface.
+    (https://huggingface.co/transformers/_modules/transformers/optimization.html#get_cosine_schedule_with_warmup)
+
+    Create a schedule with a learning rate that decreases following the
+    values of the cosine function between 0 and `pi * cycles` after a warmup
+    period during which it increases linearly between 0 and 1.
+    """
+
+    def lrfn(epoch):
+        if epoch < num_warmup_steps:
+            return (float(epoch) / float(max(1, num_warmup_steps))) * lr
+        progress = float(epoch - num_warmup_steps) / float(max(1, num_training_steps - num_warmup_steps))
+        return max(0.0, 0.5 * (1.0 + math.cos(math.pi * float(num_cycles) * 2.0 * progress))) * lr
+
+    return tf.keras.callbacks.LearningRateScheduler(lrfn, verbose=True)
 
 
 class SGDRScheduler(Callback):
