@@ -1,4 +1,5 @@
 import tensorflow as tf
+import numpy as np
 
 
 def get_distribution_strategy():
@@ -24,3 +25,8 @@ def get_distribution_strategy():
     print("REPLICAS: ", strategy.num_replicas_in_sync)
 
     return strategy
+
+
+def set_seed(seed):
+    np.random.seed(seed)
+    tf.random.set_seed(seed)
