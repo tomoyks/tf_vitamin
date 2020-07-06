@@ -3,12 +3,7 @@ class Config:
 
     BASE_DIR = f'/content/drive/My Drive/kaggle/{COMPETITION_NAME}'
 
-    # change by each project.
-    PROJECT_NAME = 'efn_06'
-
     INPUT_DIR = BASE_DIR + '/input'
-    PROJECT_DIR = BASE_DIR + '/projects/' + PROJECT_NAME
-    MODEL_OUTPUT = PROJECT_DIR + '/model.h5'
 
     TRAIN_CSV = INPUT_DIR + '/train.csv'
     TEST_CSV = INPUT_DIR + '/test.csv'
@@ -17,6 +12,9 @@ class Config:
 
     def __init__(self, project_name, dataset_name='default'):
         self.PROJECT_NAME = project_name
+        self.PROJECT_DIR = self.BASE_DIR + '/projects/' + project_name
+        self.MODEL_OUTPUT = self.PROJECT_DIR + '/model.h5'
+
         self.set_gcs_path(dataset_name)
 
     def set_gcs_path(self, name='default'):
