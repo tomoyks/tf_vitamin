@@ -26,19 +26,19 @@ class Config:
     @staticmethod
     def get_gcs_path(name='default'):
         # default
-        GCS_PATH = 'gs://kds-a3aec024652bcd1f15b0c708f4c002b53dac682b3c37787a5d439986'
+        GCS_PATH = 'gs://kds-fd4529477b6bfc079d14d2c1fb860b2da18e0293b0c3c51476182df1'
         TRAIN_FILES = GCS_PATH + '/tfrecords/train*'
         TEST_FILES = GCS_PATH + '/tfrecords/test*'
 
         if name == '512x512_with_70k':
             # 512x512-melanoma-tfrecords-70k-images
-            GCS_PATH = 'gs://kds-51dc62bf57c4786d5254ad5d5cecdbde9c81887f9d45aeaf4770c7b5'
+            GCS_PATH = 'gs://kds-440c33710adcb2af797fe26a547a54a2f370013a41e3529ac09d8501'
             TRAIN_FILES = GCS_PATH + '/train*.tfrec'
             TEST_FILES = GCS_PATH + '/test*.tfrec'
 
         if name == '256x256':
             # melanoma-256x256
-            GCS_PATH = 'gs://kds-e12fcdd8602eaeb3e7343f4b322f78239cfa17e4bf5db65058b851ad'
+            GCS_PATH = 'gs://kds-65548a4c87d02212371fce6e9bd762100c34bf9b9ebbd04b0dd4b65b'
             TRAIN_FILES = GCS_PATH + '/train*.tfrec'
             TEST_FILES = GCS_PATH + '/test*.tfrec'
 
