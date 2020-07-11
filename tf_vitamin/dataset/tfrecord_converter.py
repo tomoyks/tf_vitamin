@@ -18,7 +18,7 @@ class TfrecordConverter(metaclass=ABCMeta):
     def convert2dataset(self, mode, ordered=False):
         dataset = tf.data.TFRecordDataset(
             self.filename, num_parallel_reads=AUTO)
-
+        print(dataset)
         ignore_order = tf.data.Options()
         if not ordered:
             # disable order, increase speed.
@@ -26,10 +26,10 @@ class TfrecordConverter(metaclass=ABCMeta):
             # uses data as soon as it streams in, rather than in its original order
             dataset = dataset.with_options(ignore_order)
 
-        if mode == ConvertMode.TRAIN:
+        if mode == ConvertMode.TRAIN or mode == ConvertMode.TRAIN.value:
             dataset = dataset.map(self.parse_train_example,
                                   num_parallel_calls=AUTO)
-        elif mode == ConvertMode.TEST:
+        elif mode == ConvertMode.TEST or mode == ConvertMode.TEST.value:
             dataset = dataset.map(self.parse_test_example,
                                   num_parallel_calls=AUTO)
 
