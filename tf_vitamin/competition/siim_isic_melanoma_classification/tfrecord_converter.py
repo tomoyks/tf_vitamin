@@ -9,7 +9,7 @@ class TfrecordConverter(TfrecordConverter):
     def parse_train_example(self, example):
         example = tf.io.parse_single_example(example, self.record_format)
         image = self.decode_image(example['image'])
-        label = tf.cast(example['target'], tf.float64)
+        label = tf.cast(example['target'], tf.float32)
         return image, label
 
     def parse_test_example(self, example):
