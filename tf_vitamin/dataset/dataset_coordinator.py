@@ -24,5 +24,5 @@ class DatasetCoordinator:
     def concat_pseudo_label(self, train_dataset, test_dataset, pseudo_label):
         pseudo_label_dataset = tf.data.Dataset.from_tensor_slices(pseudo_label)
         test_dataset = test_dataset.zip((test_dataset, pseudo_label_dataset))
-        dataset = train_dataset.concat(test_dataset)
+        dataset = train_dataset.concatenate(test_dataset)
         return dataset
