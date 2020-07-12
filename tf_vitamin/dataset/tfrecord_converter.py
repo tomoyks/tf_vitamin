@@ -13,9 +13,10 @@ class ConvertMode(Enum):
 
 
 class TfrecordConverter(metaclass=ABCMeta):
-    def __init__(self, filename, record_format):
+    def __init__(self, filename, record_format, img_size):
         self.filename = filename
         self.record_format = record_format
+        self.img_size = img_size
 
     def convert2dataset(self, mode, ordered=False):
         dataset = tf.data.TFRecordDataset(
@@ -45,12 +46,14 @@ class TfrecordConverter(metaclass=ABCMeta):
     def parse_test_example(self, example):
         pass
 
-    @staticmethod
-    def decode_image(image_data):
+    def decode_image(self, image_data):
         image = tf.image.decode_jpeg(image_data, channels=3)
 
         # convert image to floats in [0, 1] range
         image = tf.cast(image, tf.float32) / 255.0
+
+        image = tf.reshape(image, [self.img_size, self.img_size, 3])
+        image = tf.image.resize(image, [self.img_size, self.img_size])
 
         return image
 
