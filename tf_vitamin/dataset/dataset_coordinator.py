@@ -9,7 +9,7 @@ class DatasetCoordinator:
 
     def prepare_dataset(self, dataset, batch_size, repeat=False, shuffle=False, data_augment=None):
         if repeat:
-            dataset = dataset.repeat
+            dataset = dataset.repeat()
 
         if shuffle:
             dataset = dataset.shuffle(self.seed)
