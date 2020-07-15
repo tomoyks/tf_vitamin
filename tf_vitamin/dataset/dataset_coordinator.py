@@ -7,6 +7,24 @@ class DatasetCoordinator:
     def __init__(self, seed=2048):
         self.seed = seed
 
+    def prepare_dataset(self, dataset, batch_size, repeat=False, shuffle=False, data_augment=None):
+        if repeat:
+            dataset = dataset.repeat
+
+        if shuffle:
+            dataset = dataset.shuffle(self.seed)
+            opt = tf.data.Options()
+            opt.experimental_deterministic = False
+            dataset = dataset.with_options(opt)
+
+        if data_augment is not None:
+            dataset = dataset.map(data_augment, num_parallel_calls=AUTO)
+
+        dataset = dataset.batch(batch_size)
+        dataset = dataset.prefetch(AUTO)
+
+        return dataset
+
     def prepare_train_dataset(self, dataset, batch_size, data_augment=None):
         if data_augment is not None:
             dataset = dataset.map(data_augment, num_parallel_calls=AUTO)
@@ -16,7 +34,7 @@ class DatasetCoordinator:
         dataset = dataset.prefetch(AUTO)
         return dataset
 
-    def prepare_test_dataset(self, dataset, batch_size):
+    def prepare_test_dataset(self, dataset, batch_size, repeat=False):
         dataset = dataset.batch(batch_size)
         dataset = dataset.prefetch(AUTO)
         return dataset
