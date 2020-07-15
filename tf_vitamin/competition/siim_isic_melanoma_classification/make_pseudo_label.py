@@ -1,5 +1,8 @@
+import cv2
 import os
 import pathlib
+import datetime
+
 import pandas as pd
 import numpy as np
 import tensorflow as tf
@@ -63,6 +66,7 @@ def create_tf_record(data_train, filename_train, data_test, filename_test):
     with tf.io.TFRecordWriter(filename_train) as writer:
         images, targets = data_train
         for image, target in zip(images, targets):
+            image = cv2.imencode('.jpg', image, (cv2.IMWRITE_JPEG_QUALITY, 94))[1].tostring()
             ex = record2example(image, target)
             writer.write(ex.SerializeToString())
 
@@ -75,10 +79,12 @@ def create_tf_record(data_train, filename_train, data_test, filename_test):
 
 
 def record2example(image, target):
-    return tf.train.Example(features=tf.train.Features(feature={
-        "image": _bytes_feature(image.tobytes()),
+    feature = {
+        "image": _bytes_feature(image),
         "target": _float_feature(target)
-    }))
+    }
+    example_proto = tf.train.Example(features=tf.train.Features(feature=feature))
+    return example_proto.SerializeToString()
 
 
 AUTO = tf.data.experimental.AUTOTUNE
@@ -97,16 +103,18 @@ def run(tfrec_path, pseudo_label_path, output_filename):
     unlabeled_dataset = unlabeled_dataset.zip((unlabeled_dataset, pseudo_label_dataset))
 
     # 学習データをTFRecordに書き込む
+    print(f'start creating pseudo datasets. {datetime.datetime.now()}')
     with tf.io.TFRecordWriter(output_filename) as writer:
         for idx, data in enumerate(tfds.as_numpy(unlabeled_dataset)):
             image = data[0]
             target = data[1]
+            image = cv2.imencode('.jpg', image, (cv2.IMWRITE_JPEG_QUALITY, 94))[1].tobytes()
 
             example = record2example(image, target)
-            writer.write(example.SerializeToString())
+            writer.write(example)
 
-            if (idx + 1) % 1000:
-                print(f'completed {idx + 1}.')
+            if (idx + 1) % 1000 == 0:
+                print(f'completed {idx + 1}. {datetime.datetime.now()}')
 
 
 if __name__ == '__main__':
@@ -115,7 +123,8 @@ if __name__ == '__main__':
         raise FileNotFoundError(f'Directory not found. {data_dir}')
 
     # KaggleDatasets().get_gcs_path('siim-isic-melanoma-classification')
-    tfrec_path = 'gs://kds-b0df39ea391018abfc80c95d79f90b2d362a510da49c600fae2b3501/tfrecords/test*.tfrec'
+    # tfrec_path = 'gs://kds-b0df39ea391018abfc80c95d79f90b2d362a510da49c600fae2b3501/tfrecords/test*.tfrec'
+    tfrec_path = str(data_dir / 'tfrecords' / 'test*.tfrec')
     pseudo_label_path = data_dir / 'sub_0-948.csv'
     output_path = str(data_dir / 'pseudo_dataset.tfrec')
     run(tfrec_path, pseudo_label_path, output_path)

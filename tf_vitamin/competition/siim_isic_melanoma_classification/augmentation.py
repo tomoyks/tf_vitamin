@@ -42,11 +42,10 @@ def get_mat(rotation, shear, height_zoom, width_zoom, height_shift, width_shift)
                  K.dot(zoom_matrix, shift_matrix))
 
 
-def transform(image, read_size, rot, shr, hzoom, wzoom, hshift, wshift):
+def transform(image, dim=256, rot=180.0, shr=2.0, hzoom=8.0, wzoom=8.0, hshift=8.0, wshift=8.0):
     # input image - is one image of size [dim,dim,3] not a batch of [b,dim,dim,3]
     # output - image randomly rotated, sheared, zoomed, and shifted
-    dim = read_size
-    x_dim = dim % 2  # fix for size 331
+    xdim = dim % 2  # fix for size 331
 
     rot = rot * tf.random.normal([1], dtype='float32')
     shr = shr * tf.random.normal([1], dtype='float32')
@@ -67,7 +66,7 @@ def transform(image, read_size, rot, shr, hzoom, wzoom, hshift, wshift):
     # ROTATE DESTINATION PIXELS ONTO ORIGIN PIXELS
     idx2 = K.dot(m, tf.cast(idx, dtype='float32'))
     idx2 = K.cast(idx2, dtype='int32')
-    idx2 = K.clip(idx2, -dim // 2 + x_dim + 1, dim // 2)
+    idx2 = K.clip(idx2, -dim // 2 + xdim + 1, dim // 2)
 
     # FIND ORIGIN PIXEL VALUES
     idx3 = tf.stack([dim // 2 - idx2[0,], dim // 2 - 1 + idx2[1,]])
