@@ -4,7 +4,7 @@ import numpy as np
 
 def get_distribution_strategy():
     """
-    Detect hardware, return appropriate distribution strategy
+    Detect hardware, return appropriate distribution strategy.
     """
 
     try:
@@ -24,7 +24,7 @@ def get_distribution_strategy():
 
     print("REPLICAS: ", strategy.num_replicas_in_sync)
 
-    return strategy
+    return strategy, tpu
 
 
 def set_seed(seed):
