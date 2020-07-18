@@ -1,8 +1,8 @@
 import tensorflow as tf
-from tf_vitamin.dataset.tfrecord_converter import TfrecordConverter
+from tf_vitamin.dataset.tfrecord_converter import BaseTfrecordConverter
 
 
-class TfrecordConverter(TfrecordConverter):
+class TfrecordConverter(BaseTfrecordConverter):
     def __init__(self, filename, record_format, img_size):
         super().__init__(filename, record_format, img_size)
 

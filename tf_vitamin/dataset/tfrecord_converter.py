@@ -12,7 +12,7 @@ class ConvertMode(Enum):
     TEST = 'test'
 
 
-class TfrecordConverter(metaclass=ABCMeta):
+class BaseTfrecordConverter(metaclass=ABCMeta):
     def __init__(self, filename, record_format, img_size):
         self.filename = filename
         self.record_format = record_format
