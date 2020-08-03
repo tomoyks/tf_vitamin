@@ -16,7 +16,7 @@ def get_distribution_strategy():
     if tpu:
         tf.config.experimental_connect_to_cluster(tpu)
         tf.tpu.experimental.initialize_tpu_system(tpu)
-        strategy = tf.distribute.experimental.TPUStrategy(tpu)
+        strategy = tf.distribute.TPUStrategy(tpu)
     else:
         # Default distribution strategy in Tensorflow.
         # Works on CPU and single GPU.
