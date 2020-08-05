@@ -20,7 +20,10 @@ def get_distribution_strategy():
     else:
         # Default distribution strategy in Tensorflow.
         # Works on CPU and single GPU.
-        strategy = tf.distribute.get_strategy()
+        if tf.__version__ >= '2.3.0':
+            strategy = tf.distribute.get_strategy()
+        else:
+            strategy = tf.distribute.experimental.get_strategy()
 
     print("REPLICAS: ", strategy.num_replicas_in_sync)
 
