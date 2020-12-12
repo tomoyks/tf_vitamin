@@ -61,7 +61,7 @@ class BaseCassavaConfig:
 
 class CassavaColabConfig(BaseCassavaConfig):
 
-    BASE_DIR = f'/content/drive/My Drive/kaggle'
+    BASE_DIR = pathlib.Path('/content/drive/My Drive/kaggle')
 
     def __init__(self, project_name):
         super().__init__(project_name)
@@ -69,14 +69,14 @@ class CassavaColabConfig(BaseCassavaConfig):
 
 class CassavaKaggleNotebookConfig(BaseCassavaConfig):
 
-    BASE_DIR = f'/kaggle/working'
-    INPUT_DIR = f'/kaggle/input'
+    BASE_DIR = pathlib.Path('/kaggle/working')
+    INPUT_DIR = pathlib.Path('/kaggle/input')
 
     def __init__(self, project_name):
         super().__init__(project_name)
 
-        self.PROJECT_DIR = self.BASE_DIR + '/projects/' + project_name
-        self.RESULT_BASE_DIR = self.PROJECT_DIR + '/result'
+        self.PROJECT_DIR = self.BASE_DIR / 'projects' / project_name
+        self.RESULT_BASE_DIR = self.PROJECT_DIR / 'result'
 
 
 if __name__ == '__main__':
