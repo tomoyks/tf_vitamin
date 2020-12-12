@@ -24,7 +24,7 @@ class BaseCassavaConfig:
         prefix = 'version'
 
         if not self.RESULT_BASE_DIR.exists():
-            self.RESULT_BASE_DIR.mkdir(parrents=True)
+            self.RESULT_BASE_DIR.mkdir(parents=True)
 
         # result/配下のversionを更新する。
         result_versions = list(pathlib.Path(
