@@ -18,6 +18,8 @@ class BaseCassavaConfig:
         self.RESULT_BASE_DIR = self.PROJECT_DIR / 'result'
         self.RESULT_OUTPUT_DIR = None
 
+        self.timezone = 'JST'
+
         self.__rotate_version()
         self.parameter = self.__init_parameter()
 
@@ -43,19 +45,21 @@ class BaseCassavaConfig:
         pathlib.Path(self.RESULT_OUTPUT_DIR).mkdir(parents=True)
 
     def __init_parameter(self):
-        tz_jst = datetime.timezone(datetime.timedelta(hours=9), name='JST')
-        dt_now = datetime.datetime.now(tz_jst)
+        dt_now = self.__get_current_time()
     
         parameter = {
             'base_dir': str(self.BASE_DIR),
             'project_dir': str(self.PROJECT_DIR),
             'result_output_dir': str(self.RESULT_OUTPUT_DIR),
             'created_time': dt_now.strftime('%y%m%d_%H:%M:%S'),
-            'time_zone': str(tz_jst)
+            'time_zone': self.timezone
         }
         return parameter
 
     def save_config(self):
+        dt_now = self.__get_current_time()
+        self.parameter['saved_time'] = dt_now.strftime('%y%m%d_%H:%M:%S')
+
         save_path = self.RESULT_OUTPUT_DIR / 'parameter.json'
         with open(save_path, 'w') as json_file:
             json.dump(self.parameter, json_file, indent=2)
@@ -63,8 +67,14 @@ class BaseCassavaConfig:
     def load_confiig(self, path):
         with open(path, 'r') as json_file:
             self.parameter = json.load(json_file)
+    
+    def __get_current_time(self):
+        tz_jst = datetime.timezone(datetime.timedelta(hours=9), name=self.timezone)
+        dt_now = datetime.datetime.now(tz_jst)
 
-
+        return dt_now
+        
+    
 class CassavaColabConfig(BaseCassavaConfig):
 
     BASE_DIR = pathlib.Path('/content/drive/My Drive/kaggle')
