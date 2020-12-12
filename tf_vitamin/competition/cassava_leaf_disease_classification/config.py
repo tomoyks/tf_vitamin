@@ -1,4 +1,5 @@
 import json
+import datetime
 import pathlib
 from collections import defaultdict
 
@@ -42,10 +43,15 @@ class BaseCassavaConfig:
         pathlib.Path(self.RESULT_OUTPUT_DIR).mkdir(parents=True)
 
     def __init_parameter(self):
+        tz_jst = datetime.timezone(datetime.timedelta(hours=9), name='JST')
+        dt_now = datetime.datetime.now(tz_jst)
+    
         parameter = {
             'base_dir': str(self.BASE_DIR),
             'project_dir': str(self.PROJECT_DIR),
-            'result_output_dir': str(self.RESULT_OUTPUT_DIR)
+            'result_output_dir': str(self.RESULT_OUTPUT_DIR),
+            'created_time': dt_now.strftime('%y%m%d_%H:%M:%S'),
+            'time_zone': str(tz_jst)
         }
         return parameter
 
@@ -77,13 +83,3 @@ class CassavaKaggleNotebookConfig(BaseCassavaConfig):
 
         self.PROJECT_DIR = self.BASE_DIR / 'projects' / project_name
         self.RESULT_BASE_DIR = self.PROJECT_DIR / 'result'
-
-
-if __name__ == '__main__':
-    config = BaseCassavaConfig('test')
-    config.save_config()
-
-    config.load_confiig(
-        'cassava-leaf-disease-classification/projects/test/result/version_1/parameter.json')
-
-    print(config.parameter)
