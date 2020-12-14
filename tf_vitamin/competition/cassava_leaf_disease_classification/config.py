@@ -66,8 +66,9 @@ class BaseCassavaConfig:
 
     def load_confiig(self, path):
         with open(path, 'r') as json_file:
+            # TODO: key指定
             self.parameter = json.load(json_file)
-    
+
     def __get_current_time(self):
         tz_jst = datetime.timezone(datetime.timedelta(hours=9), name=self.timezone)
         dt_now = datetime.datetime.now(tz_jst)
