@@ -4,7 +4,7 @@ import pathlib
 from collections import defaultdict
 
 
-class BaseCassavaConfig:
+class BaseRanzcrCatheterConfig:
     COMPETITION_NAME = 'ranzcr-clip-catheter-line-classification'
 
     BASE_DIR = pathlib.Path('.')
@@ -76,7 +76,7 @@ class BaseCassavaConfig:
         return dt_now
         
     
-class CassavaColabConfig(BaseCassavaConfig):
+class RanzcrCatheterColabConfig(BaseRanzcrCatheterConfig):
 
     BASE_DIR = pathlib.Path('/content/drive/My Drive/kaggle')
 
@@ -84,7 +84,7 @@ class CassavaColabConfig(BaseCassavaConfig):
         super().__init__(project_name)
 
 
-class CassavaKaggleNotebookConfig(BaseCassavaConfig):
+class RanzcrCatheterKaggleNotebookConfig(BaseRanzcrCatheterConfig):
 
     BASE_DIR = pathlib.Path('/kaggle/working')
     INPUT_DIR = pathlib.Path('/kaggle/input')
